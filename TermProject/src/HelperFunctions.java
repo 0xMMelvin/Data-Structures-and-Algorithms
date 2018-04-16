@@ -80,7 +80,7 @@ public class HelperFunctions {
      */
     public static Map<String, Integer> createDirectDistanceMap() {
         // create an empty HashMap
-        Map<String, Integer> directDistMap = new TreeMap<>();
+        Map<String, Integer> directDistMap = new HashMap<>();
         // create variables to hold data from the file
         String directDistString;
         String[] directDistArr;
