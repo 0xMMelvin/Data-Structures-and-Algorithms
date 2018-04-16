@@ -13,11 +13,11 @@ public class project {
 
         //----------    CREATION OF THE GRAPH AND DIRECT DISTANCE MAP  ----------//
         // create the adjacency matrix
-        ArrayList<String[]> edgeList = HelperFunctions.readFile();
+        ArrayList<String[]> directDistances = HelperFunctions.readFile();
         // create empty graph
         AdjacencyMapGraph<String, Integer> graph = new AdjacencyMapGraph<>(false);
         // load the graph with Vertices and Edges
-        graph = HelperFunctions.loadGraph(graph, edgeList);
+        graph = HelperFunctions.loadGraph(graph, directDistances);
         // create a HashMap of Vertices direct distance to destination
         Map<String, Integer> directDistMap = HelperFunctions.createDirectDistanceMap();
 

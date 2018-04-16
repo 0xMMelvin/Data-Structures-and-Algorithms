@@ -215,7 +215,7 @@ public class HelperFunctions {
      * @param distance  The sum of the edges along the shortest path.
      */
     public static void displayResults(Stack<Vertex<String>> allNodes, Stack<Vertex<String>> shortest,
-                                      int distance) {
+                                      int distance, int algoNum) {
 
         // reverse the stacks
         Stack<Vertex<String>> all = new Stack<>();
@@ -241,6 +241,7 @@ public class HelperFunctions {
 
         // output results
         System.out.println();
+        System.out.println("Algorithm " + algoNum + ":");
         System.out.println("Sequence of all nodes: " + allString.toString());
         System.out.println("Shortest path: " + pathString.toString());
         System.out.println("Distance traveled: " + distance);

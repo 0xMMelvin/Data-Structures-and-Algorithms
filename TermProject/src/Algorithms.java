@@ -83,7 +83,7 @@ public class Algorithms {
             distanceOne += edge.getElement();
         }
         // display results
-        HelperFunctions.displayResults(allOne, pathOne, distanceOne);
+        HelperFunctions.displayResults(allOne, pathOne, distanceOne, 1);
     }
 
     public static void algorithmTwo(AdjacencyMapGraph<String, Integer> graph, Vertex<String> src,
@@ -159,6 +159,6 @@ public class Algorithms {
             distanceTwo += edge.getElement();
         }
         // display results
-        HelperFunctions.displayResults(allTwo, pathTwo, distanceTwo);
+        HelperFunctions.displayResults(allTwo, pathTwo, distanceTwo, 2);
     }
 }
