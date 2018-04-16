@@ -92,7 +92,6 @@ public class HelperFunctions {
                 directDistString = scanner.nextLine();
                 directDistArr = directDistString.split(" ");
                 // add data to HashMap
-                // TODO: think about storing the distances as keys
                 directDistMap.put(directDistArr[0], Integer.parseInt(directDistArr[1]));
             }
         } catch (IOException e) {
@@ -142,7 +141,6 @@ public class HelperFunctions {
                 continue;
                 // no match found
             } else {
-                // TODO: change to IllegalArgumentException?
                 System.out.println("That Vertex is not in the graph!");
                 System.exit(0);
             }
@@ -222,20 +220,20 @@ public class HelperFunctions {
         // reverse the stacks
         Stack<Vertex<String>> all = new Stack<>();
         Stack<Vertex<String>> path = new Stack<>();
-        while (!allNodes.isEmpty()) {
+        while (!allNodes.empty()) {
             all.push(allNodes.pop());
         }
-        while (!shortest.isEmpty()) {
+        while (!shortest.empty()) {
             path.push(shortest.pop());
         }
         // build the results
         StringBuilder allString = new StringBuilder();
         StringBuilder pathString = new StringBuilder();
 
-        while (!all.isEmpty()) {
+        while (!all.empty()) {
             allString.append(all.pop().getElement() + " -> ");
         }
-        while (!path.isEmpty()) {
+        while (!path.empty()) {
             pathString.append(path.pop().getElement() + " -> ");
         }
         allString.delete(allString.length() - 4, allString.length());
