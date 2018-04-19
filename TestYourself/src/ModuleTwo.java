@@ -66,6 +66,7 @@ public class ModuleTwo {
         bound of f(n).
 
     ************** Examples **************
+    * Finding the Maximum in an Array
     public static double arrayMax(double[] data) {
         int n = data.length;
         double currentMax = data[0];
@@ -77,5 +78,89 @@ public class ModuleTwo {
         return currentMax;
     }
     f(n) = c1 + c2 + c3(n - 1) + c4 = c3n + c5 = O(n)
+
+    * Composing Long Strings
+    public static String repeat1(char c, int n) {
+        String answer = "";
+        for (int i = 0; i< n; i++) {
+            answer += c;
+        }
+        return answer;
+    }
+    Strings are immutable objects so c is not simply concatenated to answer. A new String is actually created to include
+    c. The time to perform this is proportional to the length of the string.
+    f(n) = 1 + 2 + 3 + ... + n = O(n^2)
+
+    * Three-way Set Disjointness Problem
+    public static boolean disjoint1(int[] groupA, int[] groupB, int[] groupC) {
+        for (int a : groupA)
+            for (int b : groupB)
+                for (int c : groupC)
+                    if ((a == b) && (b == c))
+                        return false;
+        return true;
+    }
+    f(n) = O(n^3)
+    public static boolean disjoint2(int[] groupA, int[] groupB, int[] groupC) {
+        for (int a : groupA)
+            for (int b : groupB)
+                if (a == b)
+                    for (int c: groupC)
+                        if (b == c)
+                            return false
+        return true;
+    }
+    Line 4 is executed n^2 times. Line 5 can only be executed a max of n times.
+    f(n) = O(n^2)
+
+    * Element Uniqueness
+    public static boolean unique1(int[] data) {
+        int n = data.length;
+        for (int j = 0; j < n - 1; j++)
+            for (int k = j + 1; k < n; k++)
+                if (data[j] == data[k])
+                    return false;
+        return true;
+    }
+    f(n) = O(n^2)
+    public static boolean unique2(int[] data) {
+        int n = data.length;
+        int[] temp = Arrays.copyOf(data, n);
+        Arrays.sort(temp);
+        for (int j = 0; j < n - 1; j++)
+            if (temp[j] == temp[j + 1]
+                return false;
+        return true;
+    }
+    f(n) = O(n log n) because or the Arrays.sort() method.
+
+    ************** Proof Methods **************
+    *** look over this before exam ***
+
+    ************************** Recursion ******************************************
+    Factorial
+    public static int factorial(int n) throws IllegalArgumentException {
+        if (n < 0) throw new IllegalArgumentException("Argument must be non negative");
+        else if (n == 0) return 1;
+        else return n * factorial(n - 1);
+    }
+    factorial(4) -> 4 * factorial(3) -> 3 * factorial(2) -> 2 * factorial(1) -> 1 * factorial(0)
+    -> returns 1, returns 1 * 1 = 1, returns 2 * 1 = 2, returns 3 * 2 = 6, returns 4 * 6 = 24
+
+    Binary Search
+    public static boolean binarySearch(int[] data, int target, int low, int high) {
+        if (low > high)
+            return false;
+        else {
+            int mid = (low + high) / 2;
+            if (target == data[mid])
+                return true;
+            else if (target < data[mid])
+                return binarySearch(data, target, 0, mid - 1);
+            else
+                return binarySearch(data, target, mid + 1, high);
+            }
+        }
+
      */
 }
