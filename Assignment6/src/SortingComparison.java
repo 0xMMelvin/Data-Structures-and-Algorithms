@@ -5,11 +5,11 @@ import java.util.Random;
 public class SortingComparison {
 
     /**
-     * Insertion-sort of an array of integers into nondecreasing order.
+     * Insertion-sort of an array of integers into non-decreasing order.
      *
      * @param data Integer array.
      */
-    public static void insertionSort(int[] data) {
+    private static void insertionSort(int[] data) {
         int n = data.length;
         // begin with second int
         for (int k = 1; k < n; k++) {
@@ -30,14 +30,15 @@ public class SortingComparison {
     }
 
     /**
-     * Merges contets of arrays s1 and s2 into properly sized array s.
+     * Merges contents of arrays s1 and s2 into properly sized array s.
      *
-     * @param s1 Array to be merged.
-     * @param s2 Array to be merged.
-     * @param s Array to merge into.
+     * @param s1   Array to be merged.
+     * @param s2   Array to be merged.
+     * @param s    Array to merge into.
      * @param comp Default comparator.
      */
-    public static void merge(int[] s1, int[] s2, int[] s, Comparator comp) {
+    @SuppressWarnings("unchecked")
+    private static void merge(int[] s1, int[] s2, int[] s, Comparator comp) {
         int i = 0, j = 0;
         while (i + j < s.length) {
             if (j == s2.length || (i < s1.length && comp.compare(s1[i], s2[j]) < 0)) {
@@ -52,10 +53,11 @@ public class SortingComparison {
 
     /**
      * Merge sort contents of array s.
-     * @param s Integer array to sort.
+     *
+     * @param s    Integer array to sort.
      * @param comp Default comparator
      */
-    public static void mergeSort(int[] s, Comparator comp) {
+    private static void mergeSort(int[] s, Comparator comp) {
         int n = s.length;
         // array is trivially sorted
         if (n < 2) {
@@ -77,12 +79,13 @@ public class SortingComparison {
     /**
      * Sorts the array s.
      *
-     * @param s Array to be sorted.
+     * @param s    Array to be sorted.
      * @param comp Default comparator.
-     * @param a Start position.
-     * @param b End position.
+     * @param a    Start position.
+     * @param b    End position.
      */
-    public static void quickSort(int[] s, Comparator comp, int a, int b) {
+    @SuppressWarnings("unchecked")
+    private static void quickSort(int[] s, Comparator comp, int a, int b) {
         // array is trivially sorted
         if (a >= b) return;
         int left = a;
@@ -120,20 +123,18 @@ public class SortingComparison {
     // variables for heapsort
     private static int[] a;
     private static int n;
-    private static int left;
-    private static int right;
-    private static int largest;
 
-    public static void buildheap(int[] a) {
+    private static void buildheap(int[] a) {
         n = a.length - 1;
         for (int i = n / 2; i >= 0; i--) {
             maxheap(a, i);
         }
     }
 
-    public static void maxheap(int[] a, int i) {
-        left = 2 * i;
-        right = 2 * i + 1;
+    private static void maxheap(int[] a, int i) {
+        int left = 2 * i;
+        int right = 2 * i + 1;
+        int largest;
         if (left <= n && a[left] > a[i]) {
             largest = left;
         } else {
@@ -148,13 +149,13 @@ public class SortingComparison {
         }
     }
 
-    public static void exchange(int i, int j) {
+    private static void exchange(int i, int j) {
         int t = a[i];
         a[i] = a[j];
         a[j] = t;
     }
 
-    public static void heapSort(int[] a0) {
+    private static void heapSort(int[] a0) {
         a = a0;
         buildheap(a);
         for (int i = n; i > 0; i--) {
@@ -168,536 +169,62 @@ public class SortingComparison {
     public static void main(String[] args) {
 
         Comparator comp = new DefaultComparator();
-
         // n = 10,000
         int n = 10000;
-        int[] a = new int[n];
-        Random r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
+        while (n <= 100000) {
+            int[] a = new int[n];
+            Random r = new Random();
+            // fill array
+            for (int i = 0; i < n; i++) {
+                a[i] = r.nextInt(1000000) + 1;
+            }
+            // insertion sort
+            int[] aCopy = a.clone();
+            long startTime = System.currentTimeMillis();
+            insertionSort(aCopy);
+            long endTime = System.currentTimeMillis();
+            System.out.println("Insertion sort with n = " + n);
+            System.out.println("Start: " + startTime);
+            System.out.println("End: " + endTime);
+            long totalTime = endTime - startTime;
+            System.out.println("Total time: " + totalTime);
+            System.out.println();
+            // merge sort
+            aCopy = a.clone();
+            startTime = System.currentTimeMillis();
+            mergeSort(aCopy, comp);
+            endTime = System.currentTimeMillis();
+            System.out.println("Merge sort with n = " + n);
+            System.out.println("Start: " + startTime);
+            System.out.println("End: " + endTime);
+            totalTime = endTime - startTime;
+            System.out.println("Total time: " + totalTime);
+            System.out.println();
+            // quick sort
+            aCopy = a.clone();
+            startTime = System.currentTimeMillis();
+            quickSort(aCopy, comp, 0, n - 1);
+            endTime = System.currentTimeMillis();
+            System.out.println("Quick sort with n = " + n);
+            System.out.println("Start: " + startTime);
+            System.out.println("End: " + endTime);
+            totalTime = endTime - startTime;
+            System.out.println("Total time: " + totalTime);
+            System.out.println();
+            // heap sort
+            aCopy = a.clone();
+            startTime = System.currentTimeMillis();
+            heapSort(aCopy);
+            endTime = System.currentTimeMillis();
+            System.out.println("Heap sort with n = " + n);
+            System.out.println("Start: " + startTime);
+            System.out.println("End: " + endTime);
+            totalTime = endTime - startTime;
+            System.out.println("Total time: " + totalTime);
+            System.out.println();
+            // increment n
+            n += 10000;
         }
-        // insertion sort
-        int[] aCopy = a.clone();
-        long startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 10,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        long totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 10,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 10,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 10,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 20,000
-        n = 20000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 20,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 20,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 20,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 20,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 30,000
-        n = 30000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 30,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 30,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 30,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 30,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 40,000
-        n = 40000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 40,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 40,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 40,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 40,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 50,000
-        n = 50000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 50,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 50,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 50,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 50,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 60,000
-        n = 60000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 60,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 60,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 60,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 60,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 70,000
-        n = 70000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 70,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 70,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 70,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 70,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 80,000
-        n = 80000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 80,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 80,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 80,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 80,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 90,000
-        n = 90000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 90,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 90,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 90,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 90,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-
-        // n = 100,000
-        n = 100000;
-        a = new int[n];
-        r = new Random();
-        // fill array
-        for (int i = 0; i < n; i++) {
-            a[i] = r.nextInt(1000000) + 1;
-        }
-        // insertion sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        insertionSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Insertion sort with n = 100,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // merge sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        mergeSort(aCopy, comp);
-        endTime = System.currentTimeMillis();
-        System.out.println("Merge sort with n = 100,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // quick sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        quickSort(aCopy, comp, 0, n - 1);
-        endTime = System.currentTimeMillis();
-        System.out.println("Quick sort with n = 100,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
-        // heap sort
-        aCopy = a.clone();
-        startTime = System.currentTimeMillis();
-        heapSort(aCopy);
-        endTime = System.currentTimeMillis();
-        System.out.println("Heap sort with n = 100,000:");
-        System.out.println("Start: " + startTime);
-        System.out.println("End: " + endTime);
-        totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime);
-        System.out.println();
     }
 }
 

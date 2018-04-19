@@ -7,10 +7,11 @@ import java.util.Set;
 import java.util.Map;
 
 
-public class Algorithms {
+class Algorithms {
 
-    public static void algorithmOne(AdjacencyMapGraph<String, Integer> graph, Vertex<String> src,
-                                    Vertex<String> destination, Map<String, Integer> directDistMap) {
+    @SuppressWarnings("unchecked")
+    static void algorithmOne(AdjacencyMapGraph<String, Integer> graph, Vertex<String> src,
+                             Vertex<String> destination, Map<String, Integer> directDistMap) {
 
         // shortest path nodes for algorithm 1
         Stack<Vertex<String>> pathOne = new Stack<>();  // push and pop methods are O(1)
@@ -25,7 +26,8 @@ public class Algorithms {
         allOne.push(current);
         // loop until we reach destination
         while (!current.equals(destination)) {
-            // stores the adjacent nodes with closest node first
+            // stores the adjacent nodes with cl
+            // osest node first
             PriorityQueue<Integer, Vertex<String>> pq = new HeapPriorityQueue<>();
             // loop through adjacent edges of current node
             for (Edge<Integer> edge : graph.outgoingEdges(current)) {
@@ -86,8 +88,9 @@ public class Algorithms {
         HelperFunctions.displayResults(allOne, pathOne, distanceOne, 1);
     }
 
-    public static void algorithmTwo(AdjacencyMapGraph<String, Integer> graph, Vertex<String> src,
-                                    Vertex<String> destination, Map<String, Integer> directDistMap) {
+    @SuppressWarnings("unchecked")
+    static void algorithmTwo(AdjacencyMapGraph<String, Integer> graph, Vertex<String> src,
+                             Vertex<String> destination, Map<String, Integer> directDistMap) {
         // shortest path nodes for algorithm 2
         Stack<Vertex<String>> pathTwo = new Stack<>();  // push and pop methods are O(1)
         // all nodes visited for algorithm 2
