@@ -162,5 +162,164 @@ public class ModuleTwo {
             }
         }
 
+    ************** Analysis of Recursive Algorithms **************
+    Analyze the running time of one execution of a recursive method. Next, count the number of recursive calls. Multiply
+    the two.
+
+    Factorial: When factorial(n) is invoked, it is recursively invoked n more times. f(n) = n + 1 = O(n)
+
+    Binary Search: When binary search is invoked recursively, the input size is halved. Anytime we are halving n each
+        time we have log n. f(n) = log(n) + 1 = O(n).
+
+    ************************** Stacks and Queues ******************************************
+
+    ************** Stacks **************
+    * LIFO data structure
+    * push(e)
+    * pop()
+    * top()
+    * size()
+    * isEmpty()
+
+    When it is implemented with an array, all methods run in O(1) time, but there is an inherit size limitation.
+    When implemented with a SinglyLinkedList, there is no more size limitation.
+    * size() -> list.size()
+    * isEmpty() -> list.isEmpty()
+    * push(e) -> list.addFirst(e)
+    * pop() -> removeFirst()
+    * top() -> list.first()
+
+    ************** Queues **************
+    When implemented with an array, or a SinglyLinkedList:
+    * enqueue(e) - O(1)
+    * dequeue() - O(1)
+    * first() - O(1)
+    * size() - O(1)
+    * isEmpty() - O(1)
+
+    ***
+    * Test Yourself 2.2
+    * Consider the LinkedQueue class, whose definition is shown below:
+    * Please think carefully, practice and write your own program, and then click "Show Answer" to compare yours to the
+    * suggested possible solution.
+    * 1   public class LinkedQueue<E> implements Queue<E> {
+    * 2      private SinglyLinkedList<E> list = new SinglyLinkedList<>();
+    * 3      public LinkedQueue() { }
+    * 4      public int size() { return list.size(); }
+    * 5      public boolean isEmpty() { return list.isEmpty(); }
+    * 6      public void enqueue(E element) { list.addLast(element); }
+    * 7      public E first() { return list.first(); }
+    * 8      public E dequeue() { return list.removeFirst(); }
+    * 9   }
+    * Note that the LinkedQueue is discussed in section 2.3.2.3 and it is also described in page 245 of the textbook.
+    * Write a Java method with signature concatenate(LinkedQueue<E> Q2) that takes all elements of Q2 and appends them
+    * to the end of the original queue. The operations should run in O(1) time and Q2 must be empty after the execution
+    * of the method.
+    ***
+    public void concatenate(LinkedQueue<E> Q2) {
+        if (head == null)
+            head = Q2.head;
+        else
+            tail.setNext(Q2.head);
+        tail = Q2.tail;
+        size += Q2.size;
+        Q2.tail = Q2.head = null;
+        Q2.size = 0;
+    }
+
+    ************** Double-Ended Queues **************
+    * addFirst(e)—Inserts a new element e at the front of the deque.
+    * addLast(e)—Inserts a new element e at the rear of the deque.
+    * removeFirst()—Removes and returns the first element of the deque. Returns null if the deque is empty.
+    * removeLast()—Removes and returns last element of the deque. Returns null if the deque is empty.
+    * first( )—Returns the first element of the deque, without removing it. Returns null if the deque is empty.
+    * last( )—Returns the last element of the deque, without removing it. Returns null if the deque is empty.
+    * size( )—Returns the number of elements in the deque.
+    * isEmpty( )—Returns true if the deque is empty and false otherwise.
+    We can implement this with a CircularlyLinkedList or a DoublyLinkedList, DoublyLinkedList being the better choice
+        because it naturally supports removal from both ends. In fact, the DoublyLinkedList has already implemented all
+        of the methods, we just need to add "implements Deque<E>" to the declaration.
+
+    ***
+    * Test Yourself 2.10
+    * Write a recursive Java method that computes the product of two positive integers m and n, using only addition and
+    * subtraction.
+    ***
+    public int product(int n, int m) {
+        if ( m == 1)
+            return n;
+        else
+            return n + product(n, m - 1);
+    }
+
+    ***
+    * Test Yourself 2.11
+    * Write a recursive Java method that computes the integer part of the base-two logarithm of n, using only addition
+    * and subtraction.
+    ***
+    public int logTwo(int n) {
+        if (n < 2) return 0;
+        return 1 + logTwo(n/2);
+    }
+
+    ***
+    * Test Yourself 2.11
+    * Write a recursive Java method that finds the maximum element in an array A of n elements.
+    ***
+    public int findMax(int[] a) {
+        if (a.length == 1) return a[0];
+        int[] temp = Arrays.copyOf(a, a.length - 1);
+        return greaterOfTwo(a[a.length - 1], recursiveMax(temp));
+    }
+
+    ***
+    * Test Yourself 2.13
+    * Write a recursive Java method that receives a character string and outputs its reverse. For example, if an input
+    * argument is "abc" then "cba" is the output.
+    ***
+    public void printReverse(String s, int n) {
+        if (n >= 0) {
+            System.out.println(s.charAt(n));
+            printReverse(s, n - 1);
+        }
+    }
+    public void printReverse(String s) {
+        printReverse(s, s.length - 1);
+    }
+
+    ***
+    * Test Yourself 2.14
+    * Rewrite the following method without using recursion:
+    * double power(double x, int n){
+    *     if (n == 0) return 1;
+    *     else return x * power(x, n-1);
+    * }
+    ***
+    double power(double x, int n) {
+        double result = x;
+        if (n == 0)
+            return 1;
+        else {
+            while (n > 1) {
+                result *= x;
+                n--;
+            }
+        }
+        return result;
+    }
+
+    ***
+    * Test Yourself 2.17
+    * Write a generic Java method with signature transfer(Stack <E> S, Stack <E> T) that transfers all elements from
+    * stack S to stack T, so that element that starts at the top of S is the first to be inserted on to T, and the last
+    * element at the bottom of S ends up at the top of T.
+    ***
+    public static transfer(Stack<E> s, Stack<E> t) {
+        while (!s.isEmpty()) {
+            t.push(s.pop());
+        }
+    }
+
+
      */
 }
