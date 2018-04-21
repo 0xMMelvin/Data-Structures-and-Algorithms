@@ -1,7 +1,4 @@
-public class ModuleTwo {
-
-    /*
-     ************************** Algorithm Analysis ******************************************
+************************** Algorithm Analysis ******************************************
      An algorithm is a finite sequence of steps that solves a problem.
 
      ************** Experimental Analysis **************
@@ -319,7 +316,3 @@ public class ModuleTwo {
             t.push(s.pop());
         }
     }
-
-
-     */
-}

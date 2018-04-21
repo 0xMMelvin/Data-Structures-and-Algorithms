@@ -1,7 +1,4 @@
-public class ModuleOne {
-
-    /*
-    ************************** SinglyLinkedList ******************************************
+************************** SinglyLinkedList ******************************************
     Algorithm addFirst(e): SinglyLinkedList
         newest = Node(e)    // new node with the reference to element e
         newest.next = head  // new node's next is set to refer to old head node
@@ -270,7 +267,3 @@ public class ModuleOne {
         }
         return size;
     }
-
-     */
-
-}

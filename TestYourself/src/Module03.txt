@@ -1,0 +1,379 @@
+****************************************** Lists ******************************************
+List ADT in the text book supports the following functions:
+size()
+isEmpty()
+get(i)
+set(i, e)
+add(i, e)
+remove(i)
+
+Lists can be implemented with an array which allows direct access to elements using indices, but adding and removing
+    elements requires restructuring the array because we have to shift elements, and the array capacity is fixed unless
+    we resize the array.
+    size(), isEmpty(), get(), and set() take O(1) time, the add() and remove() methods take O(n) time.
+Lists can be implemented with a dynamic array by checking if the addition would cause an overflow, then creating a larger
+    array and putting the old array in it and assigning the old reference to the new reference, then adding the new
+    element. The run times remain the same.
+
+***************** Positional Lists *****************
+A position is an abstraction that represents the location of an element in a list. The index of an element represents the
+    location of the element in the whole sequence/global context. A position focuses on the local aspect, allowing for
+    a user to refer to any element in a list, regardless of its location, and perform arbitrary insertions and deletions.
+
+first()
+last()
+before(p)
+after(p)
+isEmpty()
+size()
+addFirst(e)
+addLast(e)
+addBefore(p, e)
+addAfter(p, e)
+set(p, e)
+remove(p)
+    Everything runs in O(1) time when implemented with a DoublyLinkedList
+
+The Position<E> interface only supplies the getElement() method. The specific implementation allots the rest. Naturally,
+    we can use a DoublyLinkedList to implement a positional list. In such an implementation, the Node class is an
+    implementation of Position.
+The PositionalList class implements all of the above methods plus the following methods:
+    validate(p) - returns a Node
+    position(node) - returns a position
+    addBetween(e, Node pred, Node succ) - returns a position
+
+***************** Iterators *****************
+An iterator is a software design pattern for traversing a data structure, such as a sequence.
+Java's Iterator interface is defined in the java.util package, and an Iterator object can be used to iterate over a
+    Java collection. The Iterator interface includes the following three methods:
+
+    hasNext()
+    next()
+    remove() - removes from the collection the element returned by the most recent call to next()
+The Iterable interface has the iterator() method, which creates and returns an Iterator object. The Java Collection
+    interface extends the Iterable interface so that all collection objects can invoke the iterator() method.
+
+***************** Java Collections Framework *****************
+In Java there are two types of containers, a Collection, storing a collection of objects, and a Map, storing key/value pairs.
+                            Collection                          Map
+                                |                                |
+                Set     List    Queue   Deque                SortedMap
+                 |
+             SortedSet
+
+***************** List Iterators *****************
+The ListIterator interface extends the Iterator interface and add bi-directional traversal of a list. It has the additional
+    following methods:
+
+    add(e)
+    hasNext()
+    hasPrevious()
+    previous()
+    next()
+    nextIndex()
+    previousIndex()
+    remove()
+    set(e)
+
+***************** Java's List-Based Algorithms *****************
+copy(dest, src)
+disjoint(c, d)
+fill(L, e)
+frequency(c, e)
+replaceAll(L, e, f)
+reverse(L)
+shuffle(L)
+sort(L)
+swap(L, i, j)
+toArray() - for Lists
+toArray(T[] a) - for Lists
+asList(T ... a)
+
+***************** Sorting a Positional List *****************
+
+public static void insertionSort(PositionalList<Integer> list) {
+        Position<Integer> marker = list.first();
+        while (marker != list.last()) {
+            Position<Integer> pivot = list.after(marker);
+            int value = pivot.getElement();
+            if (value > marker.getElement())
+                marker = pivot;
+            else {
+                Position<Integer> walk = marker;
+                while (walk != list.first() && list.before(walk).getElement() > value)
+                    walk = list.before(walk);
+                list.remove(pivot);
+                list.addBefore(walk, value);
+            }
+        }
+    }
+****************************************** Trees ******************************************
+A tree is an organizational structure that represents a collection of items in a hierarchical manner. Examples include
+    family trees, organizational charts, and hierarchical structures of some mathematical expressions. Every element,
+    except the root element, has a parent element and 0 or more children elements.
+
+***************** Definitions and Properties *****************
+A tree T is a set of nodes storing elements such that the nodes have a parent-child relationship that satisfies:
+    If T is nonempty, it has a distinguished node, called the root of T, that has no parent.
+    Each v of T, except the root node, has a unique parent node w. Every node with parent w is a child of w.
+    Nodes with the same parent are called siblings.
+    A node v is external if v has no children. An external node is also called a leaf.
+    A node v is internal if v has one or more children.
+    A node u is an ancestor of node v if u = v or u is an ancestor of the parent of v.
+    A node v is a descendant of a node u if u is an ancestor of v.
+    A edge is a pair of nodes (u, v) such that u is the parent of v, or vice versa.
+    A path is a sequence of nodes such that any two consecutive nodes in the sequence constitute an edge. The length of
+        a path is the number of edges in the path.
+    There is a unique path from any node to the root.
+
+***************** Tree ADT *****************
+A position stores each element
+    getElement()
+Accessor methods
+    root()
+    parent(p)
+    children(p)
+    numChildren(p)
+Query methods
+    isInternal(p)
+    isExternal(p)
+    isRoot(p)
+General methods
+    size()
+    isEmpty()
+    iterator()
+    positions()
+                    *** more added later ***
+***************** Depth and Height *****************
+Given a position p, the depth of p is defined to be the number of ancestors of p, except p itself.
+    Recursively as follows:
+        If p is the root, the depth of p is 0.
+        Otherwise, the depth of p is one plus the depth of its parent
+
+        public int depth(Position<E> p) throws IllegalArgumentException {
+            if (isRoot(p))
+                return 0;
+            else
+                return 1 + depth(parent(p));
+        }
+
+The height of a tree is the length of the longest path from the root downward to an external node. Same as the maximum
+    of the depths of all positions in the tree.
+
+    private int height(Position<E> p) throws IllegalArgumentException {
+        int h = 0;
+        for (Position<E> c : children(p))
+            h = Math.max(h, 1 + height(c));
+        return h;
+    }   // O(n)
+
+***
+* Test Yourself 3.1
+* Let T be a tree with n positions. The lowest common ancestor (LCA) of two positions p and q is defined to be the
+* lowest position in T that has both p and q as descendants (where we allow a position to be a descendant of itself).
+* Write a pseudocode of an efficient algorithm that finds the LCA of p and q.
+* Please think carefully, write your program, and then click "Show Answer" to compare yours to the possible algorithm.
+***
+
+Algorithm lowestCommonAncestor(Position<E> p, Position<E> q)
+    Input: Two positions
+    Output: Returns the lowest common ancestor of p and q if p and q share a common ancestor, else returns null
+        ???
+        The answer in the module is confusing
+        if v has a right child
+            p = v's right child
+            while (p has a left child) do
+                p = p's left child
+            return p
+        else
+            p = v's parent
+            while (p != and v is not a left child of p) do
+                v = p
+                p = p's parent
+            return p
+
+***************** Binary Trees *****************
+A binary tree is an ordered tree with the following properties:
+    1. Every node has at most two children.
+    2. Each child node is labeled as being a left or right child.
+    3. A left child precedes a right child in the order of children of a node.
+A binary tree is proper if each node has either zero or two children. So, in a proper binary tree, every internal node
+    has two children.
+A binary tree can be defined recursively as follows:
+    A binary tree is either:
+        An empty tree
+        A nonempty tree with a root node r, and two binary trees that are the left and the right subtree of r. One or
+            both of these subtrees can be empty.
+
+***** Binary Tree ADT - extends Tree ADT *****
+left(p)
+right(p)
+sibling(p)
+
+***** Binary Tree Properties *****
+Let level d of a binary tree T be the set of nodes at depth d of T. As we go down the a binary tree, the maximum number
+    of nodes at each level doubles. At level d, the maximum number of nodes is 2^d. So, it grows exponentially. We can
+    derive other interesting properties from this observation. First, we define the following notations with regard to
+    a binary tree T:
+        n: the number of nodes of T
+        n_E: the number of external nodes of T
+        n_I: the number of internal nodes of T
+        h: the height of T
+    T has the following properties:
+        1. h + 1 <= n <= 2^(h+1) - 1 -> the number of nodes ranges from h + 1 to 2^(h+1) -1
+        2. 1 <= n_E <= 2^h -> the number of external nodes ranges from 1 to 2^h
+        3. h <= n_I <= 2^h - 1 -> the number of internal nodes ranges from h to 2^h - 1
+        4. log(n+1) - 1 <= h <= n - 1 -> the height of the tree ranges from log(n+1) - 1 to n - 1
+    If T is proper:
+        1. 2h + 1 <= n <= 2^(h+1) - 1 -> the number of nodes ranges from 2h + 1 to 2^(h+1) - 1
+        2. h + 1 <= n_E <= 2^h -> the number of external nodes ranges from h + 1 to 2^h
+        3. h <- n_I <= 2^h - 1 -> the number of internal nodes ranges from h to 2^h - 1
+        4. log(n+1) - 1 <= h <= (n-1)/2 -> the height ranges from log(n+1) - 1 to (n-1)/2
+    In a nonempty proper tree:
+        n_E = n_I + 1
+
+********** Implementing BinaryTrees **********
+We choose a linked structure to implement binary trees. A node represented by a position p, keeps a reference to the
+    element it stores and references to its parent and children. If p is the root node of the tree, then its parent
+    reference is null. A reference to a left child or a right child is null if p has no left or right child respectively.
+The tree itself keeps a reference to the root node and the number of nodes in the tree, size.
+
+addRoot(e) - O(1)
+addLeft(p, e) - O(1)
+addRight(p, e) - O(1)
+set(p, e) - O(1)
+attach(p, T1, T2) - O(1)
+remove(p) - O(1)
+size(), isEmpty() - O(1)
+root(), parent(p), left(p), right(p), sibling(p), children(p), numChildren(p) - O(1)
+depth(p) - O(dp + 1)
+height - O(n)
+
+The nested Node class has references to the element, parent, left, and right, as instance variables, and accessor and
+    update methods for those variables. The LinkedBinaryTree class it self has root and size instance variables.
+
+***** Linked Structure for General Trees *****
+In a general tree where the number of children of a node is not fixed, we use a node that has three fields. The parent,
+    element, and children field. The children field stores a reference to a container object that has references to the
+    children nodes.
+
+********** Tree Traversal **********
+A tree traversal is a systematic way of visiting all positions in T.
+
+***** Preorder Traversal *****
+A preorder traversal of a tree visits the root of T first and then visits subtrees recursively.
+    Algorithm preorder(p): O(n)
+        visit p
+        for each child c in children(p)
+            preorder(c)
+
+***** Postorder Traversal *****
+In the postorder traversal, the root is visited after all of its subtrees have been visited.
+    Algorithm postorder(p): O(n)
+        for each child c in children(p)
+            preorder(c)
+        visit p
+
+***** Breadth-First Tree Traversal *****
+Visits all nodes at depth d before it visits all nodes at depth d + 1. Also referred to as a BFS.
+    Algorithm breadthFirst(): O(n) - uses a FIFO Queue to order the visits to the nodes in a tree.
+        initialize Q to contain the root of the tree
+        while Q is not empty
+            p = Q.dequeue()
+            visit p
+            for each child c in children(p)
+                Q.enqueue(c)
+        visit p
+
+***** Inorder Traversal *****
+Only applies to binary trees. The left subtree of the root is visited, then the root, then the right subtree.
+    Algorithm inorder(p): O(n)
+        if p has a left child lc
+            inorder(lc)
+        visit p
+        if p has a right child rc
+            inorder(rc)
+
+********** Binary Search Tree **********
+A binary search tree is a binary tree with additional properties. For set S, a binary tree for S is a proper binary
+    search tree T if, for each position p in T, the following properties are satisfied:
+        Each position p stores an element from S, denoted as e(p)
+        All elements in the left subtree of a position p (if any) are less than e(p)
+        All elements in the right subtree of a position p (if any) are greater than e(p)
+
+***
+* Test Yourself 3.2
+* Write a pseudocode of an algorithm that implements the inorderNext(p) operation on a binary tree T. This operation
+* returns the position visited after p in an inorder traversal of T, and returns null if p is the last node visited.
+***
+Algorithm inorderNext(p):
+    if v has a right child
+        p = v's right child
+        while (p has a left child) do
+            p = p's left child
+        return p
+    else
+        p = v's parent
+        while (p != and v is not a left child of p) do
+            v = p
+            p = p's parent
+        return p
+
+***
+* Test Yourself 3.5
+* Suppose that N denotes the capacity of the array that stores the elements of an array list. Write a Java method that
+* reduces the capacity of the array from N to N/2 if the number of elements in the list goes below N/4.
+***
+public void shrink() {
+    if (size < data.length / 4) {
+        E[] temp = (E[]) new Object[data.length / 2];
+        for (int k = 0; k < size; k++)
+            temp[k] = data[k];
+        data = temp;
+    }
+}
+
+***
+* Test Yourself 3.10
+* Consider the positional ADT operations (methods) described in Section 3.1.3.2 (they are also described in pages 274
+* and 275 of the textbook). Write a Java code that implements the addBefore operation using only methods in {isEmpty,
+* first, last, before, after, addFirst, addAfter}.
+***
+public void addBefore(Position<E> p, E e) {
+    if (p == first())
+        return addFirst(e);
+    else
+        return addAfter(before(p), e);
+}
+
+***
+* Test Yourself 3.11
+* Suppose you want to add to the positional ADT a new operation findPosition(e), which returns the first position
+* containing an element equal to e (or null if no such position exists). Write a Java code implementing the operation
+* using only existing operations given in Section 3.1.3.2.
+***
+public Position<E> findPosition(E e) {
+    Position<E> walk = first();
+    while (walk != null && !e.equals(walk.getElement()))
+        walk = after(walk);
+    return walk;
+    }
+}
+
+***
+* Test Yourself 3.12
+* Suppose you want to add to the positional ADT a new operation positionAtIndex(i), that returns the first position of
+* the element having index i (or throws an IndexOutOfBoundsException, if necessary). Write a Java code implementing the
+* operation using only existing operations given in Section 3.1.3.2
+***
+
+public Position<E> positionAtIndex(int i) {
+    if (i < 0 || i >= size()) {
+        throw new IndexOutOfBoundsException("Invalid index");
+    }
+    Position<E> walk = first();
+    for (int k = 0; k < i; k++) {
+        walk = after(walk);
+    }
+    return walk;
+}
