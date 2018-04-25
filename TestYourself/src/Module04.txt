@@ -1,0 +1,91 @@
+****************************************** Priority Queues ******************************************
+Elements are removed based on some priority criterion.
+
+***** PriorityQueue ADT *****
+insert(k, v)
+min()
+removeMin()
+size()
+isEmpty()
+
+***** Implementing a PriorityQueue *****
+Entries are store in the pq as Entry objects. The Entry interface supplies getKey() and getValue() methods.
+
+***** Comparing Keys with Total Orders *****
+Comparability property - x <= y or y <= x
+Antisymmetric property - if x <= y and y <= x, then x = y
+Transitive property - if x <= y and y <= z, then x <= z
+Reflexivity property - x <= x
+
+A total order defines a linear ordering among all elements.
+
+When we need to compare objects, we can implement Comparable and overwrite the compareTo() method to return as follows:
+    a.compareTo(b)
+        A negative number if a < b
+        0 if a = b
+        A positive number if a > b
+
+To compare objects not by their natural ordering we can implement the Comparator interface and overwrite the compare()
+    method. We should set it up to return in the same way that compareTo returns.
+
+***** Implementing PriorityQueue with an Unsorted List *****
+Use a LinkedPositionalList - this uses a DoublyLinkedList
+min(), removeMin(), findMin() - O(n)
+insert(), size(), isEmpty() - O(1)
+
+***** Implementing PriorityQueue with an Sorted List *****
+Still uses a LinkedPositionalList, but the insert() method add elements in such a way that they are always added in
+    sorted order.
+insert() - O(n)
+size(), isEmpty(), min(), removeMin() - O(1)
+
+********** Heaps **********
+A heap is a binary tree that satisfies the following two properties:
+    heap order property - in a heap T, for every position p except the root, the key stored at p is greater than or
+                          equal to the key stored at p's parent.
+        Resulting from this, when we traverse a path from the root to any leaf node, keys along the path are in
+            nondecreasing order, and the key at the root node is always the minimal key.
+    complete binary tree property - a heap is always a complete binary tree.
+        This means that at levels 0, 1, ..., h - 1 of T have the maximal number of nodes -> level i has 2^i nodes, where
+            0 <= i <= h - 1, and nodes at level h are in the leftmost possible positions at that level.
+        This results in the height of a tree storing n elements to be h = floor(log n). Furthermore, the number of nodes
+            at level h is at least 1 and at most 2^h. So, the total number of nodes, n, in a heap T with height h:
+                2^h <= n <= 2^(h+1) - 1
+
+size(), isEmpty(), min() - O(1)
+insert(), removeMin() = O(log n)
+
+****************************************** Maps and Hash Tables ******************************************
+********** Maps **********
+                                                                    Hash Table
+Method                          Unsorted List                   Expected    Worst Case
+get                                 O(n)                            O(1)        O(n)
+put                                 O(n)                            O(1)        O(n)
+remove                              O(n)                            O(1)        O(n)
+size, isEmpty                       O(1)                            O(1)        O(1)
+entrySet, keySet, values            O(n)                            O(1)        O(n)
+
+***
+* Test Yourself 4.6
+* Consider the following class definition:
+* public class Student implements Person {
+*    String id;
+*    String name;
+*    int age;
+*    public String getID() { return id;}
+*    public String getName() { return name; }
+*    public int getAge() { return age; }
+*  }
+*  Write a Java comparator, named StudentComparator, which compares students based on their age.
+***
+public class StudentComparator implements Comparator {
+    public int compare(Student a, Student b) {
+        if (a.getAge() < b.getAge())
+            return -1;
+        else if (a.getAge() == b.getAge())
+            return 0;
+        else
+            return 1;
+    }
+}
+
